@@ -61,7 +61,7 @@ data_SG_stan <- list(N=T, year=SG_year, inv=SGinv, gov=SGgov, log_gdp = SGlog_gd
 # Run the model and examine results
 fit_all <- stan(model_code = stan, #using source
             data = data_SG_stan,
-            iter = 2000,
+            iter = 8000,
             warmup = 500,
             thin = 10,
             chains = 4)
@@ -73,46 +73,23 @@ str(posterior)
 print(fit_all, pars=c('a', 'b', 'c', 'd', 'sigma'), digits=3) 
 # Visualize
 monitor(fit_all)
-?rstan
+
 #traces
 mcmc_trace(fit_all)
-draws <- fit_all$draws()
-#summarize_draws(fit)
+
+
 #define coefficients
 a <-extract(fit_all)$a
 b <- extract(fit_all)$b
 c <- extract(fit_all)$c
 d <- extract(fit_all)$d
-sigma <- extract(fit_all)sigma
-# generated regressors
-N = 10000
-K = 3
 
-covariates = replicate(K, rnorm(n=N))
-colnames(covariates) = c('X1', 'X2', 'X3')
-covariates = c(UKyear, Ukinf)
 
-# Add the intercept term in the covariate
-X = cbind(Intercept=1, covariates)
-
-# Generate Y variable: y = 6 + .4*X1 - 2.1*X2 + .5*X3 + rnorm(N, mean=0, sd=2)
-coefs = c(6, .4, -2.1, .5)
-mu = X %*% coefs
-typeof()
-mean(a)
-sigma = 2
-y = rnorm(N, mu, sigma)
-
-plot(y)
-
-plot(fit_all)
-get_posterior_mean(fit_all)
 #histograms #most likely signs should be a close to normal distribution with the mean 
 #as the most likely estimate
 dev.off()
 mcmc_hist(fit_all)
-get_stanmodel(fit_all)
-get_stancode(fit_all)
+
 
 #probability that estimate is above 0
 p_b2 <- sum(c>0)/length(c) #investments
