@@ -1,7 +1,7 @@
 
 # R code for assignment EBS2043
 # Author: Merle Maria Praum
-# Student number: i6249108
+# Student number: --
 
 library(car)
 library(readxl)
